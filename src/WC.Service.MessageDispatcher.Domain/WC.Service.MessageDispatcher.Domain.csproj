@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="WC.Library.Domain" Version="1.0.6" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\WC.Service.MessageDispatcher.Data.Abstractions\WC.Service.MessageDispatcher.Data.Abstractions.csproj" />
+      <ProjectReference Include="..\WC.Service.MessageDispatcher.Domain.Abstractions\WC.Service.MessageDispatcher.Domain.Abstractions.csproj" />
+    </ItemGroup>
+
+</Project>

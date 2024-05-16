@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WC.Service.MessageDispatche
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WC.Service.MessageDispatcher.Data.PostgreSql", "src\WC.Service.MessageDispatcher.Data.PostgreSql\WC.Service.MessageDispatcher.Data.PostgreSql.csproj", "{B23FA52E-AF16-4F3C-B7AD-A347C9948D82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WC.Service.MessageDispatcher.Domain", "src\WC.Service.MessageDispatcher.Domain\WC.Service.MessageDispatcher.Domain.csproj", "{90EAB9FF-4BA4-40A1-B79B-B969CA044B13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WC.Service.MessageDispatcher.Domain.Abstractions", "src\WC.Service.MessageDispatcher.Domain.Abstractions\WC.Service.MessageDispatcher.Domain.Abstractions.csproj", "{97DC438A-6454-4AD9-96F2-CC4A4ACCCFE2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,5 +34,13 @@ Global
 		{B23FA52E-AF16-4F3C-B7AD-A347C9948D82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B23FA52E-AF16-4F3C-B7AD-A347C9948D82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B23FA52E-AF16-4F3C-B7AD-A347C9948D82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90EAB9FF-4BA4-40A1-B79B-B969CA044B13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90EAB9FF-4BA4-40A1-B79B-B969CA044B13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90EAB9FF-4BA4-40A1-B79B-B969CA044B13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90EAB9FF-4BA4-40A1-B79B-B969CA044B13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97DC438A-6454-4AD9-96F2-CC4A4ACCCFE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97DC438A-6454-4AD9-96F2-CC4A4ACCCFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97DC438A-6454-4AD9-96F2-CC4A4ACCCFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97DC438A-6454-4AD9-96F2-CC4A4ACCCFE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

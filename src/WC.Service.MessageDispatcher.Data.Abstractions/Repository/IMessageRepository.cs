@@ -3,4 +3,4 @@ using WC.Service.MessageDispatcher.Data.Models;
 
 namespace WC.Service.MessageDispatcher.Data.Repository;
 
-public interface IMessageRepository : IRepository<ChatEntity>;
+public interface IMessageRepository : IRepository<MessageEntity>;
