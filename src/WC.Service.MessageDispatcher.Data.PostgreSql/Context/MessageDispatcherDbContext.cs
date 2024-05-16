@@ -7,7 +7,7 @@ public sealed class MessageDispatcherDbContext : DbContext
 {
     public MessageDispatcherDbContext(DbContextOptions<MessageDispatcherDbContext> options) : base(options)
     {
-        Database.Migrate();
+        // Database.Migrate();
     }
     
     public DbSet<ChatEntity> Chats { get; set; } = null!;

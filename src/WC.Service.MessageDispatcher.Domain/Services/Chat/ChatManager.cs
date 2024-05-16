@@ -8,7 +8,9 @@ using WC.Service.MessageDispatcher.Domain.Models;
 
 namespace WC.Service.MessageDispatcher.Domain.Services.Chat;
 
-public class ChatManager : DataManagerBase<ChatManager, IChatRepository, ChatModel, ChatEntity>, IChatManager
+public class ChatManager : DataManagerBase<ChatManager, IChatRepository,
+        ChatModel, ChatEntity>,
+    IChatManager
 {
     public ChatManager(IMapper mapper, ILogger<ChatManager> logger, IChatRepository repository,
         IEnumerable<IValidator> validators) : base(mapper, logger, repository, validators)
