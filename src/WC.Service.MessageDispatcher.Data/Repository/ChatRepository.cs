@@ -5,7 +5,8 @@ using WC.Service.MessageDispatcher.Data.Models;
 
 namespace WC.Service.MessageDispatcher.Data.Repository;
 
-public class ChatRepository<TDbContext> : RepositoryBase<ChatRepository<TDbContext>, TDbContext, ChatEntity>
+public class ChatRepository<TDbContext> : RepositoryBase<ChatRepository<TDbContext>, TDbContext, ChatEntity>,
+    IChatRepository
     where TDbContext : DbContext
 {
     protected ChatRepository(TDbContext context, ILogger<ChatRepository<TDbContext>> logger) :
