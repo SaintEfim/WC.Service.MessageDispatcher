@@ -5,8 +5,8 @@ namespace WC.Service.MessageDispatcher.API.Models.Chat;
 
 public class ChatDto : DtoBase
 {
-    public string Name { get; set; } = string.Empty;
-    public bool IsGroupChat { get; set; }
+    public string? Name { get; set; }
+    public bool IsGroup { get; set; }
     public List<Guid> UserIds { get; set; } = null!;
     public List<MessageDto>? Messages { get; set; }
 }

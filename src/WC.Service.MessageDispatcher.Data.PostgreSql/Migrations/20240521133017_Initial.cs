@@ -17,8 +17,8 @@ namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    IsGroupChat = table.Column<bool>(type: "boolean", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    IsGroup = table.Column<bool>(type: "boolean", nullable: false),
                     UserIds = table.Column<List<Guid>>(type: "uuid[]", nullable: false)
                 },
                 constraints: table =>
@@ -34,23 +34,23 @@ namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
                     ChatId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     Text = table.Column<string>(type: "text", nullable: false),
-                    SentTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    SentTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ChatEntityId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Chats_ChatId",
-                        column: x => x.ChatId,
+                        name: "FK_Messages_Chats_ChatEntityId",
+                        column: x => x.ChatEntityId,
                         principalTable: "Chats",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ChatId",
+                name: "IX_Messages_ChatEntityId",
                 table: "Messages",
-                column: "ChatId");
+                column: "ChatEntityId");
         }
 
         /// <inheritdoc />

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Application</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/5.0.11/signalr.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #loginContainer { padding: 20px; }
+        #chatContainer { display: none; flex: 1; }
+        #friendsList { width: 200px; border-right: 1px solid #ccc; padding: 10px; }
+        #chatBox { flex: 1; padding: 10px; }
+        #messages { height: 300px; overflow-y: scroll; border: 1px solid #ccc; padding: 10px; }
+        #messageInput { width: calc(100% - 90px); }
+    </style>
+</head>
+<body>
+<div id="loginContainer">
+    <h3>Login</h3>
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button onclick="login()">Login</button>
+</div>
+
+<div id="chatContainer">
+    <div id="friendsList">
+        <h3>Friends</h3>
+        <ul id="friends"></ul>
+    </div>
+    <div id="chatBox">
+        <div id="chatroom"></div>
+        <h3 id="chatWith">Chat</h3>
+        <div id="messages"></div>
+        <div>
+            <input type="text" id="messageInput" placeholder="Type a message..." />
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("https://localhost:1003/chat", {
+            accessTokenFactory: () => getCookie('accessToken')
+        })
+        .build();
+
+    function getCookie(name) {
+        let matches = document.cookie.match(new RegExp(
+            "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
+        ));
+        console.log(`Cookie ${name}:`, matches ? decodeURIComponent(matches[1]) : undefined)
+        return matches ? decodeURIComponent(matches[1]) : undefined;
+    }
+    // connection.on("Receive", function(message) {
+    //
+    //     const messagesDiv = document.getElementById("messages");
+    //     const messageElement = document.createElement("div");
+    //     messageElement.textContent = `${message}`;
+    //     messagesDiv.appendChild(messageElement);
+    // });
+    function setCookie(name, value, days) {
+        let expires = "";
+        if (days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    async function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        try {
+            const response = await fetch("https://localhost:1002/api/UserAuthentication/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password })
+            });
+
+            if (!response.ok) {
+                throw new Error("Login failed");
+            }
+
+            const data = await response.json();
+            setCookie("accessToken", data.accessToken, 1); // Сохранение токена в куки на 1 день
+            document.getElementById("loginContainer").style.display = "none";
+            document.getElementById("chatContainer").style.display = "flex";
+            start();
+        } catch (err) {
+            console.error(err.toString());
+        }
+    }
+
+    let chatId = getCookie('chatId') || null;
+    let friendId = null;
+
+    connection.on("ReceiveMessage", (message) => {
+        const messagesDiv = document.getElementById("messages");
+        const messageElement = document.createElement("div");
+        messageElement.textContent = `${message.userId}: ${message.text}`;
+        messagesDiv.appendChild(messageElement);
+    });
+    async function joinChat(friendId) {
+        try {
+            const currentChatId = await connection.invoke("JoinChat", friendId);
+            document.getElementById("chatWith").textContent = `Chat with ${friendId}`;
+            document.getElementById("messages").innerHTML = ''; // Clear previous messages
+
+            // Сохраняем currentChatId в куки
+            setCookie("chatId", currentChatId, 1);
+            chatId = currentChatId; // Обновляем переменную chatId
+        } catch (err) {
+            console.error(err.toString());
+        }
+    }
+
+    async function sendMessage() {
+        const messageInput = document.getElementById("messageInput");
+        const messageText = messageInput.value;
+
+        if (!messageText) {
+            return;
+        }
+
+        try {
+            await connection.invoke("SendMessage", chatId, messageText);
+            messageInput.value = '';
+            const messagesDiv = document.getElementById("messages");
+            const messageElement = document.createElement("div");
+            messagesDiv.appendChild(messageElement);
+        } catch (err) {
+            console.error(err.toString());
+        }
+    }
+
+    async function start() {
+        try {
+            await connection.start();
+            console.log("SignalR Connected.");
+            // Simulate loading friends
+            const friends = [
+                { id: "5b32b9c0-e9a6-483e-99db-e0b4f01be0ca", name: "user1" },
+                { id: "a39596db-6ff2-4496-9e97-544bc8a2e628", name: "user2" }
+            ];
+            const friendsList = document.getElementById("friends");
+            friends.forEach(friend => {
+                const friendElement = document.createElement("li");
+                friendElement.textContent = friend.name;
+                friendElement.onclick = () => joinChat(friend.id);
+                friendsList.appendChild(friendElement);
+            });
+        } catch (err) {
+            console.error(err.toString());
+            setTimeout(start, 5000);
+        }
+    }
+
+    const accessToken = getCookie("accessToken");
+    if (accessToken) {
+        document.getElementById("loginContainer").style.display = "none";
+        document.getElementById("chatContainer").style.display = "flex";
+        start();
+    } else {
+        document.getElementById("loginContainer").style.display = "block";
+    }
+</script>
+</body>
+</html>

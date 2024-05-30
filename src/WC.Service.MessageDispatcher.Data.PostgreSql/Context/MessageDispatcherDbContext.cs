@@ -9,15 +9,11 @@ public sealed class MessageDispatcherDbContext : DbContext
     {
         // Database.Migrate();
     }
-    
+
     public DbSet<ChatEntity> Chats { get; set; } = null!;
     public DbSet<MessageEntity> Messages { get; set; } = null!;
-    
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<MessageEntity>()
-            .HasOne(m => m.Chat)
-            .WithMany(c => c.Messages)
-            .HasForeignKey(m => m.ChatId);
     }
 }
