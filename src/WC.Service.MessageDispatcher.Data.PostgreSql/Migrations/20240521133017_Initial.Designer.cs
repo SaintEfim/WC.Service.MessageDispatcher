@@ -13,7 +13,7 @@ using WC.Service.MessageDispatcher.Data.PostgreSql.Context;
 namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
 {
     [DbContext(typeof(MessageDispatcherDbContext))]
-    [Migration("20240516153726_Initial")]
+    [Migration("20240521133017_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,11 +32,10 @@ namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("IsGroupChat")
+                    b.Property<bool>("IsGroup")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<List<Guid>>("UserIds")
@@ -54,6 +53,9 @@ namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("ChatEntityId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
@@ -69,20 +71,16 @@ namespace WC.Service.MessageDispatcher.Data.PostgreSql.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("ChatEntityId");
 
                     b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("WC.Service.MessageDispatcher.Data.Models.MessageEntity", b =>
                 {
-                    b.HasOne("WC.Service.MessageDispatcher.Data.Models.ChatEntity", "Chat")
+                    b.HasOne("WC.Service.MessageDispatcher.Data.Models.ChatEntity", null)
                         .WithMany("Messages")
-                        .HasForeignKey("ChatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Chat");
+                        .HasForeignKey("ChatEntityId");
                 });
 
             modelBuilder.Entity("WC.Service.MessageDispatcher.Data.Models.ChatEntity", b =>
